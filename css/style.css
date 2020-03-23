@@ -1,0 +1,95 @@
+body {
+    font-family: 'Trebuchet MS', cursive;;
+    background-color: #eee;
+    color: #222;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calculator {
+    width: 320px;
+    padding: 10px;
+    background-color: #aaa;
+    border: 4px solid #222;
+    border-radius: 5px;
+}
+
+#resultsField {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    padding: 10px;
+    margin: 0 10px 10px 10px;
+    border-radius: 5px;
+}
+
+#history {
+    text-align: right;
+    vertical-align: bottom;
+    padding-top: 15px;
+    font-size: 16px;
+    color: #666;
+}
+
+#history:hover {
+    color: #222;
+}
+
+#output {
+    text-align: right;
+    padding-top: 15px;
+    font-size: 32px;
+}
+
+input[type="text"] {
+    border: none;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+button {
+    width: 50px;
+    height: 50px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #666;
+    color: #fff;
+}
+
+button:hover {
+    opacity: 0.9;
+    cursor: pointer;
+}
+
+button:active {
+    font-size: 15px;
+}
+
+button:focus {
+    outline: none;
+}
+
+.number, #zero, #dot {
+    background-color: #ccc;
+    color: #fff;
+}
+
+#zero {
+    width: 130px;
+}
+
+.operator, #result {
+    background-color: #4080bf;
+    color: #fff;
+}
