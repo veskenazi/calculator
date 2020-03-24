@@ -9,9 +9,10 @@ let dot = document.getElementById("dot");
 let result = document.getElementById("result");
 
 let clearOnNextClick = false;
-let temp = null;
-let op = null;
-
+let tmp1 = 0;
+let tmp2 = 0;
+let op1 = null;
+let op2 = null;
 
 const checkResult = (res) => {
     let str = res.toString();
@@ -24,7 +25,7 @@ const checkResult = (res) => {
     let index = copy.indexOf(".");
     if (index != -1) {
         let n = 15 - (index + 2);
-        res = Math.floor(Number(copy) * 10**n) / 10**n;
+        res = Math.round(Number(copy) * 10**n) / 10**n;
     } else {
         res = Number(copy);
     }
@@ -60,7 +61,10 @@ const operate = (op, x1, x2) => {
 clearAll.addEventListener("click", () => {
     history.value = "";
     output.value = "0";
-    temp = null;
+    tmp1 = 0;
+    tmp2 = 0;
+    op1 = null;
+    op2 = null;
 });
 
 backSpace.addEventListener("click", () => {
@@ -85,13 +89,27 @@ for (let number of numbers) {
 
 for (let operator of operators) {
     operator.addEventListener("click", (e) => {
-        op = e.target.textContent;
-        history.value += output.value + " " + op + " ";
-        if (!temp) {
-            temp = output.value;
+        history.value += output.value + " " + e.target.textContent + " ";
+        if (!tmp1) {
+            op1 = e.target.textContent;
+            tmp1 = output.value;
+        } else if (tmp1 && !tmp2) {
+            op2 = e.target.textContent;
+            tmp2 = output.value;
+            if (op1 == "×" || (op1 == "÷" && op2 != "×") || ((op1 == "+" || op1 == "-") && (op2 != "÷" && op2 != "×"))) {
+                tmp1 = operate(op1, tmp1, tmp2);
+                tmp2 = null;
+                op1 = op2;
+                op2 = null;
+                output.value = tmp1;
+            }
         } else {
-            temp = operate(op, temp, output.value);
-            output.value = temp;
+            tmp2 = operate(op2, tmp2, output.value);
+            tmp1 = operate(op1, tmp1, tmp2);
+            tmp2 = null;
+            op1 = e.target.textContent;
+            op2 = null;
+            output.value = tmp1;
         }
         clearOnNextClick = true;
     });
@@ -99,11 +117,24 @@ for (let operator of operators) {
 
 result.addEventListener("click", () => {
     history.value = "";
-    if (!temp) {
+    if (!tmp1) {
         // do nothing
+    } else if (tmp1 && !tmp2) {
+        output.value = operate(op1, tmp1, output.value);
+        tmp1 = 0;
+        op1 = null;
     } else {
-        output.value = operate(op, temp, output.value);
-        temp = null;
+        if (op1 == "×" || (op1 == "÷" && op2 != "×") || ((op1 == "+" || op1 == "-") && (op2 != "÷" && op2 != "×"))) {
+            tmp1 = operate(op1, tmp1, tmp2);
+            output.value = operate(op2, tmp1, output.value);
+        } else {
+            tmp2 = operate(op2, tmp2, output.value);
+            output.value = operate(op1, tmp1, tmp2);
+        }
+            tmp1 = 0;
+            tmp2 = 0;
+            op1 = null;
+            op2 = null;
     }
     clearOnNextClick = true;
 });
